@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes.js";
 import guestRoutes from "./routes/guestRoutes.js";
-import userRoutes from "./routes/User.js"; 
+import userRoutes from "./routes/user.js"; 
 import excelRoute from './routes/excel.js';
 
 
