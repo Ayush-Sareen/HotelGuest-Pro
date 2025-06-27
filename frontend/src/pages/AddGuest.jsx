@@ -25,7 +25,7 @@ export default function AddGuest() {
 
     const token = localStorage.getItem('token');
     try {
-      await axios.post('http://localhost:5000/api/guests/', data, {
+      await axios.post('https://hotelguest-pro-5agn.onrender.com/api/guests/', data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('Guest added!');
