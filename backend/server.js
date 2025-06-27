@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 // app.use(cors({ origin: "http://localhost:5173" }));
-app.use(cors({ origin: "https://hotelguest-pro.onrender.com" }));
+app.use(cors({ origin: "https://hotelguest-pro-5agn.onrender.com" }));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
