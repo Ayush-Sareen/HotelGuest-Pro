@@ -17,7 +17,7 @@ export default function Register() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/register', form);
+      await axios.post(https://hotelguest-pro-5agn.onrender.com/api/auth/register', form);
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
