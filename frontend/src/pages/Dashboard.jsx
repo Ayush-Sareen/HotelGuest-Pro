@@ -13,7 +13,7 @@ export default function Dashboard() {
   const fetchGuests = async () => {
     const token = localStorage.getItem('token');
     const query = new URLSearchParams(filters).toString();
-    const url = query ? `https://hotelguest-pro-5agn.onrender.com/api/guests/filter?${query}` : `http://localhost:5000/api/guests`;
+    const url = query ? `https://hotelguest-pro-5agn.onrender.com/api/guests/filter?${query}` : `https://hotelguest-pro-5agn.onrender.com/api/guests`;
     const res = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -22,7 +22,7 @@ export default function Dashboard() {
 
   const fetchHotelName = async () => {
     const token = localStorage.getItem('token');
-    const res = await axios.get('http://localhost:5000/api/users/me', {
+    const res = await axios.get('https://hotelguest-pro-5agn.onrender.com/api/users/me', {
       headers: { Authorization: `Bearer ${token}` },
     });
     setHotelName(res.data.hotelName);
@@ -76,7 +76,7 @@ export default function Dashboard() {
       });
 
       try {
-        const response = await fetch(`http://localhost:5000/${g.aadharImage}`);
+        const response = await fetch(`https://hotelguest-pro-5agn.onrender.com/${g.aadharImage}`);
         const blob = await response.blob();
         const arrayBuffer = await blob.arrayBuffer();
         const buffer = new Uint8Array(arrayBuffer);
@@ -94,7 +94,7 @@ export default function Dashboard() {
         worksheet.getRow(row.number).height = 80;
       } catch (error) {
         console.error("Image fetch error:", error);
-        worksheet.getCell(`I${row.number}`).value = `http://localhost:5000/${g.aadharImage}`;
+        worksheet.getCell(`I${row.number}`).value = `https://hotelguest-pro-5agn.onrender.com/${g.aadharImage}`;
       }
     }
 
@@ -109,7 +109,7 @@ export default function Dashboard() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    await axios.put(`http://localhost:5000/api/guests/${editData._id}`, editData, {
+    await axios.put(`https://hotelguest-pro-5agn.onrender.com/api/guests/${editData._id}`, editData, {
       headers: { Authorization: `Bearer ${token}` },
     });
     setEditData(null);
