@@ -13,7 +13,7 @@ export default function Dashboard() {
   const fetchGuests = async () => {
     const token = localStorage.getItem('token');
     const query = new URLSearchParams(filters).toString();
-    const url = query ? `http://localhost:5000/api/guests/filter?${query}` : `http://localhost:5000/api/guests`;
+    const url = query ? `https://hotelguest-pro-5agn.onrender.com/api/guests/filter?${query}` : `http://localhost:5000/api/guests`;
     const res = await axios.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
