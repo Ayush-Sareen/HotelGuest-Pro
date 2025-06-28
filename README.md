@@ -1,34 +1,56 @@
-# HotelGuest Pro 🏨
+# HotelGuest-Pro 🏨
 
-HotelGuest Pro is a full-stack hotel guest management system that allows hotel owners to manage guest records, filter entries, and export data to Excel. Aadhar card images are stored, and each record includes full booking details.
+**HotelGuest-Pro** is a full-stack hotel guest management system designed for hotel owners to manage guest data securely and efficiently. It supports Aadhaar image uploads to Cloudinary and allows exporting guest records into Excel sheets with embedded images.
 
-🔗 **Live Website:** [https://hotelguest-pro.netlify.app/](https://hotelguest-pro.netlify.app/)
+---
+
+## 🌐 Live URL
+
+- **Frontend (Netlify)**: [https://hotelguest-pro.netlify.app](https://hotelguest-pro.netlify.app)
+
+---
 
 ## ✨ Features
 
-- 📋 Add, edit, and delete guest records
-- 🧾 Store and view Aadhar image for each guest
-- 🔍 Filter guests by name, date, or month
-- 📁 Export guest records to Excel with images embedded
-- 🔐 User authentication for hotel owners
-- 📱 Fully responsive and mobile-friendly design
+- 🔐 Secure login & registration (JWT)
+- ➕ Add, edit & delete guest entries
+- 🖼 Upload Aadhaar image (stored on Cloudinary)
+- 📅 Filter guests by name, city, date, and month
+- 📤 Export guest data with Aadhaar image in Excel format
+- 📈 Dashboard with hotel-wise guest management
 
-## 📦 Tech Stack
+---
 
-**Frontend:**
-- React.js
-- Tailwind CSS
-- Axios
-- React Router
+## 🛠️ Tech Stack
 
-**Backend:**
-- Node.js
-- Express.js
-- MongoDB Atlas
-- Mongoose
-- Multer (for file uploads)
-- ExcelJS (for exporting Excel)
+| Layer        | Technology                          |
+|--------------|-------------------------------------|
+| Frontend     | React.js, Tailwind CSS              |
+| Backend      | Node.js, Express.js                 |
+| Database     | MongoDB Atlas                       |
+| Authentication | JWT                               |
+| File Storage | Cloudinary                          |
+| Excel Export | ExcelJS                             |
+| Hosting      | Netlify (frontend), Render (backend)|
 
-**Deployment:**
-- Frontend: Netlify
-- Backend: Render
+---
+
+## 🔗 Core API Endpoints
+
+| Method | Endpoint                      | Description                |
+|--------|-------------------------------|----------------------------|
+| POST   | `/api/auth/register`          | User registration          |
+| POST   | `/api/auth/login`             | User login                 |
+| GET    | `/api/guests/`                | Get all guests             |
+| GET    | `/api/guests/filter`          | Filter guests              |
+| POST   | `/api/guests/`                | Add a guest (with image)   |
+| PUT    | `/api/guests/:id`             | Update guest               |
+| DELETE | `/api/guests/:id`             | Delete guest               |
+| GET    | `/api/excel/download-excel`   | Download Excel with images |
+
+---
+
+## 🧑‍💻 Author
+
+**Ayush Sareen**  
+GitHub: [@Ayush-Sareen](https://github.com/Ayush-Sareen)
