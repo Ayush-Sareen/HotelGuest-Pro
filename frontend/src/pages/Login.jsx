@@ -32,7 +32,8 @@ export default function Login() {
       <img src="hotelicon.png" className='w-12 rounded-full' alt="" />
       <h1 className='text-3xl font-bold'>HotelGuest Pro</h1>
     </nav>
-    <div className='flex items-center justify-center min-h-[90vh] bg-[#FBE9D0]'>
+    <div className="flex items-center justify-center min-h-[90vh] bg-cover bg-center"
+        style={{ backgroundImage: "url('back.jpg')" }}>
     <form onSubmit={handleLogin} className="max-w-md mx-auto mt-10 p-6 shadow bg-[#90AEAD] border-4 border-[#874f41] rounded-2xl">
       <h2 className="text-2xl font-extrabold mb-4">Login</h2>
 

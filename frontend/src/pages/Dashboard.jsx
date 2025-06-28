@@ -134,7 +134,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="bg-[#fbe9d0] w-full min-h-screen">
+    <div className="w-full min-h-[90vh] bg-cover bg-center" style={{ backgroundImage: "url('back.jpg')" }}>
       <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4">
         <h1 className="text-3xl font-bold text-white">Guest Records <p className='text-[#FF5C00]'>{hotelName && `of ${hotelName}`}</p></h1>
         <div className="space-y-2 sm:space-y-0 sm:space-x-2 flex flex-col sm:flex-row">
