@@ -31,7 +31,7 @@ export default function Register() {
         <h1 className='text-3xl font-bold'>HotelGuest Pro</h1>
       </nav>
 
-      <div className='flex items-center justify-center min-h-[90vh] bg-cover bg-center ' style={{ backgroundImage: "url('back.jpg')" }}>
+      <div className='flex items-center justify-center min-h-[90vh] bg-cover bg-center ' style={{ backgroundImage: "url('/back.jpg')" }}>
         <form
           onSubmit={handleRegister}
           className="max-w-md mx-auto mt-10 p-6 shadow bg-[#90AEAD] border-4 border-[#874f41] rounded-2xl"
