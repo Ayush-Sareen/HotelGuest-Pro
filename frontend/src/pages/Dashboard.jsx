@@ -237,7 +237,7 @@ export default function Dashboard() {
                 <td className="px-4 py-2">{g.checkOut ? new Date(g.checkOut).toISOString().split('T')[0] : '—'}</td>
                 <td className="px-4 py-2">
                   <a
-                    href={`https://hotelguest-pro-5agn.onrender.com/${g.aadharImage}`}
+                    href={g.aadharImage}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"

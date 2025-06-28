@@ -3,14 +3,10 @@ import multer from "multer";
 import Guest from "../models/Guest.js";
 import User from "../models/User.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import { storage } from "../utils/cloudinary.js";
 
 const router = express.Router();
-
-// File upload setup
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
-});
+// Configure multer with Cloudinary storage
 const upload = multer({ storage });
 
 // Add guest
@@ -21,7 +17,7 @@ router.post("/", authMiddleware, upload.single("aadharImage"), async (req, res) 
       ...req.body,
       checkIn: req.body.checkIn ? new Date(req.body.checkIn) : null,
       checkOut: req.body.checkOut ? new Date(req.body.checkOut) : null,
-      aadharImage: req.file?.path || '',
+      aadharImage: req.file?.path || '', 
     });
     await guest.save();
     res.json({ message: "Guest added" });

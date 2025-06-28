@@ -1,14 +1,7 @@
 import express from 'express';
 import ExcelJS from 'exceljs';
-import fs from 'fs';
-import path from 'path';
 import Guest from '../models/Guest.js';
 import authMiddleware from '../middleware/authMiddleware.js';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const router = express.Router();
 
@@ -28,7 +21,7 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
       { header: 'Price', key: 'price', width: 10 },
       { header: 'Check-In', key: 'checkIn', width: 15 },
       { header: 'Check-Out', key: 'checkOut', width: 15 },
-      { header: 'Aadhar', key: 'aadharImage', width: 20 },
+      { header: 'Aadhar Image', key: 'aadharImage', width: 30 },
     ];
 
     for (const guest of guests) {
@@ -43,19 +36,31 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
         checkOut: guest.checkOut?.toLocaleDateString() || '',
       });
 
-      if (guest.aadharImage) {
-        const imagePath = path.join(__dirname, '../', guest.aadharImage);
-        if (fs.existsSync(imagePath)) {
+      if (guest.aadharImage?.startsWith('http')) {
+        try {
+          const response = await fetch(guest.aadharImage);
+          const blob = await response.blob();
+          const arrayBuffer = await blob.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
+
           const imageId = workbook.addImage({
-            filename: imagePath,
-            extension: path.extname(imagePath).slice(1),
+            buffer,
+            extension: 'png', // or jpg if you're uploading JPGs
           });
 
           sheet.addImage(imageId, {
             tl: { col: 8, row: row.number - 1 },
             ext: { width: 100, height: 100 },
           });
+
+          sheet.getRow(row.number).height = 80;
+        } catch (error) {
+          console.error("Failed to fetch image from Cloudinary:", error);
+          sheet.getCell(`I${row.number}`).value = guest.aadharImage;
         }
+      } else {
+        // Fallback to inserting image URL as text
+        sheet.getCell(`I${row.number}`).value = guest.aadharImage;
       }
     }
 

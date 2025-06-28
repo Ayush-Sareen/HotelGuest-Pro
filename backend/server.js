@@ -14,7 +14,7 @@ const app = express();
 // app.use(cors({ origin: "http://localhost:5173" }));
 app.use(cors({ origin: "https://hotelguest-pro.netlify.app" }));
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+// app.use("/uploads", express.static("uploads"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/guests", guestRoutes);
