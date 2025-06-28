@@ -1,3 +1,4 @@
+// utils/cloudinary.js
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
@@ -7,13 +8,11 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const storage = new CloudinaryStorage({
+export const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: 'hotel-guests',
     allowed_formats: ['jpg', 'jpeg', 'png'],
-    public_id: (req, file) => `${Date.now()}-${file.originalname}`,
+    public_id: (req, file) => `${Date.now()}-${file.originalname.split('.')[0]}`,
   },
-});
-
-export { cloudinary, storage };
+  });

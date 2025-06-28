@@ -1,6 +1,6 @@
 import express from 'express';
 import ExcelJS from 'exceljs';
-import fetch from 'node-fetch'; // ✅ ADD THIS
+import fetch from 'node-fetch'; // ✅ Needed to fetch remote image
 import Guest from '../models/Guest.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
@@ -37,15 +37,14 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
         checkOut: guest.checkOut?.toLocaleDateString() || '',
       });
 
-      // ✅ Handle image fetch and insertion
       if (guest.aadharImage?.startsWith('http')) {
         try {
           const response = await fetch(guest.aadharImage);
-          const buffer = await response.buffer(); // ✅ Directly get buffer
+          const buffer = await response.buffer();
 
           const imageId = workbook.addImage({
             buffer,
-            extension: 'png', // or 'jpg' based on Cloudinary file
+            extension: 'jpeg', // or 'png' if your Cloudinary images are PNG
           });
 
           sheet.addImage(imageId, {
@@ -55,7 +54,7 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
 
           sheet.getRow(row.number).height = 80;
         } catch (error) {
-          console.error("❌ Failed to fetch image from Cloudinary:", error);
+          console.error(`❌ Failed to embed image for ${guest.name}:`, error);
           sheet.getCell(`I${row.number}`).value = guest.aadharImage;
         }
       } else {
