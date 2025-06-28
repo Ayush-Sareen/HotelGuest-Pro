@@ -76,7 +76,7 @@ export default function Dashboard() {
       });
 
       try {
-        const response = await fetch(`https://hotelguest-pro-5agn.onrender.com/${g.aadharImage}`);
+        const response = await fetch(g.aadharImage);
         const blob = await response.blob();
         const arrayBuffer = await blob.arrayBuffer();
         const buffer = new Uint8Array(arrayBuffer);
@@ -94,7 +94,7 @@ export default function Dashboard() {
         worksheet.getRow(row.number).height = 80;
       } catch (error) {
         console.error("Image fetch error:", error);
-        worksheet.getCell(`I${row.number}`).value = `https://hotelguest-pro-5agn.onrender.com/${g.aadharImage}`;
+        worksheet.getCell(`I${row.number}`).value = g.aadharImage;
       }
     }
 

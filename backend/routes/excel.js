@@ -1,6 +1,6 @@
 import express from 'express';
 import ExcelJS from 'exceljs';
-import fetch from 'node-fetch'; // ✅ Needed to fetch remote image
+import fetch from 'node-fetch';
 import Guest from '../models/Guest.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
@@ -37,14 +37,21 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
         checkOut: guest.checkOut?.toLocaleDateString() || '',
       });
 
-      if (guest.aadharImage?.startsWith('http')) {
-        try {
-          const response = await fetch(guest.aadharImage);
+      try {
+        if (guest.aadharImage) {
+          // Ensure it's a full URL (starts with https://)
+          const imageUrl = guest.aadharImage.startsWith("http")
+            ? guest.aadharImage
+            : `https://${guest.aadharImage}`;
+
+          const response = await fetch(imageUrl);
           const buffer = await response.buffer();
+
+          const extension = imageUrl.includes('.png') ? 'png' : 'jpeg';
 
           const imageId = workbook.addImage({
             buffer,
-            extension: 'jpeg', // or 'png' if your Cloudinary images are PNG
+            extension,
           });
 
           sheet.addImage(imageId, {
@@ -53,13 +60,12 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
           });
 
           sheet.getRow(row.number).height = 80;
-        } catch (error) {
-          console.error(`❌ Failed to embed image for ${guest.name}:`, error);
-          sheet.getCell(`I${row.number}`).value = guest.aadharImage;
+        } else {
+          sheet.getCell(`I${row.number}`).value = 'No image';
         }
-      } else {
-        // fallback if image is not a valid URL
-        sheet.getCell(`I${row.number}`).value = guest.aadharImage;
+      } catch (error) {
+        console.error(`❌ Failed to embed image for ${guest.name}:`, error);
+        sheet.getCell(`I${row.number}`).value = guest.aadharImage || 'Error loading image';
       }
     }
 
