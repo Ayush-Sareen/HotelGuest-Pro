@@ -1,5 +1,6 @@
 import express from 'express';
 import ExcelJS from 'exceljs';
+import fetch from 'node-fetch'; // ✅ ADD THIS
 import Guest from '../models/Guest.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
@@ -36,16 +37,15 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
         checkOut: guest.checkOut?.toLocaleDateString() || '',
       });
 
+      // ✅ Handle image fetch and insertion
       if (guest.aadharImage?.startsWith('http')) {
         try {
           const response = await fetch(guest.aadharImage);
-          const blob = await response.blob();
-          const arrayBuffer = await blob.arrayBuffer();
-          const buffer = Buffer.from(arrayBuffer);
+          const buffer = await response.buffer(); // ✅ Directly get buffer
 
           const imageId = workbook.addImage({
             buffer,
-            extension: 'png', // or jpg if you're uploading JPGs
+            extension: 'png', // or 'jpg' based on Cloudinary file
           });
 
           sheet.addImage(imageId, {
@@ -55,11 +55,11 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
 
           sheet.getRow(row.number).height = 80;
         } catch (error) {
-          console.error("Failed to fetch image from Cloudinary:", error);
+          console.error("❌ Failed to fetch image from Cloudinary:", error);
           sheet.getCell(`I${row.number}`).value = guest.aadharImage;
         }
       } else {
-        // Fallback to inserting image URL as text
+        // fallback if image is not a valid URL
         sheet.getCell(`I${row.number}`).value = guest.aadharImage;
       }
     }
@@ -69,7 +69,7 @@ router.get('/download-excel', authMiddleware, async (req, res) => {
     await workbook.xlsx.write(res);
     res.end();
   } catch (err) {
-    console.error('Excel export error:', err);
+    console.error('❌ Excel export error:', err);
     res.status(500).json({ message: 'Failed to export Excel' });
   }
 });
