@@ -138,21 +138,6 @@ export default function Dashboard() {
 
   return (
     <div className="w-full min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/back.jpg')" }}>
-      <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4">
-        <h1 className="text-3xl font-bold text-white">Guest Records <p className='text-[#FF5C00]'>{hotelName && `of ${hotelName}`}</p></h1>
-        <div className="space-y-2 sm:space-y-0 sm:space-x-2 flex flex-col sm:flex-row">
-          <button onClick={() => navigate("/add")} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
-            <span className=" text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
-              Add Guest
-            </span>
-          </button>
-          <button onClick={exportToExcel} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
-            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent text-lg">
-              Export to Excel
-            </span>
-          </button>
-          <button type="button" onClick={handleLogout} className="text-red-700 hover:text-white border text-lg border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">LogOut</button>
-    <div className="w-full min-h-screen bg-[#fbe9d0] p-4">
       <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4 rounded-xl">
         <h1 className="text-3xl font-bold text-white">
           Guest Records <span className="text-[#FF5C00]">{hotelName && `of ${hotelName}`}</span>
