@@ -119,65 +119,141 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="overflow-x-auto">
-      <table className="table-auto w-full border border-gray-400">
-        <thead className="bg-[#244855] text-white">
-          <tr>
-            {tableHeaders.map(h => <th key={h} className="px-4 py-2">{h}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {guests.map((g, i) => (
-            <tr key={i} className="border-t text-sm">
-              <td className="px-4 py-2">{g.sno}</td>
-              <td className="px-4 py-2">{g.arrivalDate}</td>
-              <td className="px-4 py-2">{g.arrivalTime}</td>
-              <td className="px-4 py-2">{g.roomNumber}</td>
-              <td className="px-4 py-2">{g.name}</td>
-              <td className="px-4 py-2">{g.fatherName}</td>
-              <td className="px-4 py-2">{g.age}</td>
-              <td className="px-4 py-2">{g.accompanyingNames}</td>
-              <td className="px-4 py-2">{g.accompanyingRelations}</td>
-              <td className="px-4 py-2">{g.nationality}</td>
-              <td className="px-4 py-2">{g.purposeOfVisit}</td>
-              <td className="px-4 py-2">{g.occupation}</td>
-              <td className="px-4 py-2">{g.comingFrom}</td>
-              <td className="px-4 py-2">{g.goingTo}</td>
-              <td className="px-4 py-2">{g.fullAddress}</td>
-              <td className="px-4 py-2">{g.departureDate}</td>
-              <td className="px-4 py-2">{g.departureTime}</td>
-              <td className="px-4 py-2">{g.phone}</td>
-              <td className="px-4 py-2">{g.vehicleNumber}</td>
-              <td className="px-4 py-2">{g.numberOfPersons?.male}</td>
-              <td className="px-4 py-2">{g.numberOfPersons?.female}</td>
-              <td className="px-4 py-2">{g.numberOfPersons?.boys}</td>
-              <td className="px-4 py-2">{g.numberOfPersons?.girls}</td>
-              <td className="px-4 py-2">
-                {g.aadharImages?.map((url, idx) => (
-                  <a key={idx} href={url} target="_blank" rel="noreferrer" className="text-blue-600 underline block">
-                    Aadhaar {idx + 1}
-                  </a>
-                ))}
-              </td>
-              <td className="px-4 py-2">
-                <button onClick={() => setEditData(g)} className="text-yellow-600 hover:underline mr-2">Edit</button>
-                <button
-                  onClick={async () => {
-                    const token = localStorage.getItem('token');
-                    confirm("Are you sure you want to delete this guest?") && await axios.delete(`https://hotelguest-pro-5agn.onrender.com/api/guests/${g._id}`, {
-                      headers: { Authorization: `Bearer ${token}` },
-                    });
-                    fetchGuests();
-                  }}
-                  className="text-red-600 hover:underline"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
+    <div className="w-full min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/back.jpg')" }}>
+      <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4 rounded-xl">
+        <h1 className="text-3xl font-bold text-white">
+          Guest Records <span className="text-[#FF5C00]">{hotelName && `of ${hotelName}`}</span>
+        </h1>
+        <div className="flex gap-2">
+          <button onClick={() => navigate("/add")} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+            <span className=" text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+              Add Guest
+            </span>
+          </button>
+          <button onClick={exportToExcel} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
+            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent text-lg">
+              Export to Excel
+            </span>
+          </button>
+          <button type="button" onClick={handleLogout} className="text-red-700 hover:text-white border text-lg border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">LogOut</button>
+        </div>
+      </nav>
+
+      {/* Filters */}
+      <div className="bg-[#874f41] text-white p-4 rounded-lg mb-4">
+        <h2 className="text-xl font-bold mb-2">Filters</h2>
+        <div className="flex flex-wrap gap-4">
+          <input
+            type="text"
+            placeholder="Filter by name"
+            className="p-2 rounded text-black"
+            value={filters.name}
+            onChange={e => setFilters({ ...filters, name: e.target.value })}
+          />
+          <input
+            type="date"
+            placeholder="Filter by date"
+            className="p-2 rounded text-black"
+            value={filters.date}
+            onChange={e => setFilters({ ...filters, date: e.target.value })}
+          />
+          <input
+            type="month"
+            placeholder="Filter by month"
+            className="p-2 rounded text-black"
+            value={filters.month}
+            onChange={e => setFilters({ ...filters, month: e.target.value })}
+          />
+          <button onClick={fetchGuests} className="bg-[#244855] px-4 py-2 rounded font-bold">
+            Apply
+          </button>
+        </div>
+      </div>
+
+      {/* Edit Form */}
+      {editData && (
+        <form onSubmit={handleUpdate} className="bg-white p-4 rounded-lg mb-4 shadow">
+          <h2 className="text-xl font-bold mb-2">Edit Guest</h2>
+          {Object.keys(editData).map(key => (
+            typeof editData[key] === 'string' && (
+              <input
+                key={key}
+                className="block mb-2 p-2 border w-full"
+                type="text"
+                placeholder={key}
+                value={editData[key] || ''}
+                onChange={e => setEditData({ ...editData, [key]: e.target.value })}
+              />
+            )
           ))}
-        </tbody>
-      </table>
+          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
+          <button type="button" onClick={() => setEditData(null)} className="ml-2 px-4 py-2 border rounded">Cancel</button>
+        </form>
+      )}
+
+      {/* Guest Table */}
+      <div className="overflow-x-auto">
+        <table className="table-auto w-full border border-gray-400">
+          <thead className="bg-[#244855] text-white">
+            <tr>
+              {tableHeaders.map(h => <th key={h} className="px-4 py-2">{h}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {guests.map((g, i) => (
+              <tr key={i} className="border-t text-sm">
+                <td className="px-4 py-2">{g.sno}</td>
+                <td className="px-4 py-2">{g.arrivalDate}</td>
+                <td className="px-4 py-2">{g.arrivalTime}</td>
+                <td className="px-4 py-2">{g.roomNumber}</td>
+                <td className="px-4 py-2">{g.name}</td>
+                <td className="px-4 py-2">{g.fatherName}</td>
+                <td className="px-4 py-2">{g.age}</td>
+                <td className="px-4 py-2">{g.accompanyingNames}</td>
+                <td className="px-4 py-2">{g.accompanyingRelations}</td>
+                <td className="px-4 py-2">{g.nationality}</td>
+                <td className="px-4 py-2">{g.purposeOfVisit}</td>
+                <td className="px-4 py-2">{g.occupation}</td>
+                <td className="px-4 py-2">{g.comingFrom}</td>
+                <td className="px-4 py-2">{g.goingTo}</td>
+                <td className="px-4 py-2">{g.fullAddress}</td>
+                <td className="px-4 py-2">{g.departureDate}</td>
+                <td className="px-4 py-2">{g.departureTime}</td>
+                <td className="px-4 py-2">{g.phone}</td>
+                <td className="px-4 py-2">{g.vehicleNumber}</td>
+                <td className="px-4 py-2">{g.numberOfPersons?.male}</td>
+                <td className="px-4 py-2">{g.numberOfPersons?.female}</td>
+                <td className="px-4 py-2">{g.numberOfPersons?.boys}</td>
+                <td className="px-4 py-2">{g.numberOfPersons?.girls}</td>
+                <td className="px-4 py-2">
+                  {g.aadharImages?.map((url, idx) => (
+                    <a key={idx} href={url} target="_blank" rel="noreferrer" className="text-blue-600 underline block">
+                      Aadhaar {idx + 1}
+                    </a>
+                  ))}
+                </td>
+                <td className="px-4 py-2">
+                  <button onClick={() => setEditData(g)} className="text-yellow-600 hover:underline mr-2">Edit</button>
+                  <button
+                    onClick={async () => {
+                      const token = localStorage.getItem('token');
+                      if (confirm("Are you sure you want to delete this guest?")) {
+                        await axios.delete(`https://hotelguest-pro-5agn.onrender.com/api/guests/${g._id}`, {
+                          headers: { Authorization: `Bearer ${token}` },
+                        });
+                        fetchGuests();
+                      }
+                    }}
+                    className="text-red-600 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
