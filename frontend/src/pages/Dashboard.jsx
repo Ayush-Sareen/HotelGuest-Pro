@@ -80,16 +80,35 @@ export default function Dashboard() {
       { header: 'Aadhaar Image Links', key: 'aadharImages', width: 40 },
     ];
 
-    guests.forEach(g => {
+    for (const [i, g] of guests.entries()) {
       worksheet.addRow({
         ...g,
         male: g.numberOfPersons?.male,
         female: g.numberOfPersons?.female,
         boys: g.numberOfPersons?.boys,
         girls: g.numberOfPersons?.girls,
-        aadharImages: g.aadharImages?.join(', '),
+        aadharImages: '',
       });
-    });
+
+      if (Array.isArray(g.aadharImages)) {
+        for (const [imgIndex, imgUrl] of g.aadharImages.entries()) {
+          try {
+            const res = await axios.get(imgUrl, { responseType: 'arraybuffer' });
+            const imageId = workbook.addImage({
+              buffer: res.data,
+              extension: 'jpeg',
+            });
+
+            worksheet.addImage(imageId, {
+              tl: { col: 23, row: i + 1 },
+              ext: { width: 100, height: 100 },
+            });
+          } catch (err) {
+            console.error('Error downloading Aadhaar image:', err.message);
+          }
+        }
+      }
+    }
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
@@ -119,75 +138,61 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/back.jpg')" }}>
-      <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4 rounded-xl">
-        <h1 className="text-3xl font-bold text-white">
+    <div className="w-full min-h-screen bg-cover bg-center px-4 py-2 md:px-8" style={{ backgroundImage: "url('/back.jpg')" }}>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-2 mb-4 bg-slate-900 p-4 rounded-xl">
+        <h1 className="text-2xl md:text-3xl font-bold text-white text-center md:text-left">
           Guest Records <span className="text-[#FF5C00]">{hotelName && `of ${hotelName}`}</span>
         </h1>
-        <div className="flex gap-2">
-          <button onClick={() => navigate("/add")} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
-            <span className=" text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+        <div className="flex flex-wrap justify-center gap-2">
+          <button onClick={() => navigate("/add")} className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+            <span className="text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
               Add Guest
             </span>
           </button>
-          <button onClick={exportToExcel} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
-            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent text-lg">
+          <button onClick={exportToExcel} className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
+            <span className="text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
               Export to Excel
             </span>
           </button>
-          <button type="button" onClick={handleLogout} className="text-red-700 hover:text-white border text-lg border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">LogOut</button>
+          <button type="button" onClick={handleLogout} className="text-red-700 hover:text-white border text-lg border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+            LogOut
+          </button>
         </div>
-      </nav>
+      </div>
 
       {/* Filters */}
-      <div className="bg-[#874f41] text-white p-4 rounded-lg mb-4">
-        <h2 className="text-xl font-bold mb-2">Filters</h2>
-        <div className="flex flex-wrap gap-4">
-          <input
-            type="text"
-            placeholder="Filter by name"
-            className="p-2 rounded text-black"
-            value={filters.name}
-            onChange={e => setFilters({ ...filters, name: e.target.value })}
-          />
-          <input
-            type="date"
-            placeholder="Filter by date"
-            className="p-2 rounded text-black"
-            value={filters.date}
-            onChange={e => setFilters({ ...filters, date: e.target.value })}
-          />
-          <input
-            type="month"
-            placeholder="Filter by month"
-            className="p-2 rounded text-black"
-            value={filters.month}
-            onChange={e => setFilters({ ...filters, month: e.target.value })}
-          />
-          <button onClick={fetchGuests} className="bg-[#244855] px-4 py-2 rounded font-bold">
-            Apply
-          </button>
+      <div className="bg-[#874f41] text-white p-4 rounded-lg mb-4 shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Filters</h2>
+        <div className="grid md:grid-cols-4 gap-4">
+          <input type="text" placeholder="Filter by name" className="p-2 rounded text-black" value={filters.name} onChange={e => setFilters({ ...filters, name: e.target.value })} />
+          <input type="date" className="p-2 rounded text-black" value={filters.date} onChange={e => setFilters({ ...filters, date: e.target.value })} />
+          <input type="month" className="p-2 rounded text-black" value={filters.month} onChange={e => setFilters({ ...filters, month: e.target.value })} />
+          <button onClick={fetchGuests} className="bg-[#244855] px-4 py-2 rounded font-bold">Apply</button>
         </div>
       </div>
 
       {/* Edit Form */}
       {editData && (
-        <form onSubmit={handleUpdate} className="bg-white p-4 rounded-lg mb-4 shadow">
-          <h2 className="text-xl font-bold mb-2">Edit Guest</h2>
-          {Object.keys(editData).map(key => (
-            typeof editData[key] === 'string' && (
-              <input
-                key={key}
-                className="block mb-2 p-2 border w-full"
-                type="text"
-                placeholder={key}
-                value={editData[key] || ''}
-                onChange={e => setEditData({ ...editData, [key]: e.target.value })}
-              />
-            )
-          ))}
-          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
-          <button type="button" onClick={() => setEditData(null)} className="ml-2 px-4 py-2 border rounded">Cancel</button>
+        <form onSubmit={handleUpdate} className="bg-white p-4 rounded-lg mb-4 shadow-md">
+          <h2 className="text-xl font-semibold mb-4">Edit Guest</h2>
+          <div className="grid md:grid-cols-2 gap-4">
+            {Object.keys(editData).map(key => (
+              typeof editData[key] === 'string' && (
+                <input
+                  key={key}
+                  className="block p-2 border border-gray-300 rounded"
+                  type="text"
+                  placeholder={key}
+                  value={editData[key] || ''}
+                  onChange={e => setEditData({ ...editData, [key]: e.target.value })}
+                />
+              )
+            ))}
+          </div>
+          <div className="mt-4">
+            <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
+            <button type="button" onClick={() => setEditData(null)} className="ml-2 px-4 py-2 border rounded">Cancel</button>
+          </div>
         </form>
       )}
 
@@ -196,12 +201,12 @@ export default function Dashboard() {
         <table className="table-auto w-full border border-gray-400">
           <thead className="bg-[#244855] text-white">
             <tr>
-              {tableHeaders.map(h => <th key={h} className="px-4 py-2">{h}</th>)}
+              {tableHeaders.map(h => <th key={h} className="px-4 py-2 whitespace-nowrap text-sm md:text-base">{h}</th>)}
             </tr>
           </thead>
           <tbody>
             {guests.map((g, i) => (
-              <tr key={i} className="border-t text-sm">
+              <tr key={i} className="border-t text-sm bg-white hover:bg-gray-100">
                 <td className="px-4 py-2">{g.sno}</td>
                 <td className="px-4 py-2">{g.arrivalDate}</td>
                 <td className="px-4 py-2">{g.arrivalTime}</td>
