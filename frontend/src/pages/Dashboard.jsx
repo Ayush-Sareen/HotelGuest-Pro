@@ -206,7 +206,7 @@ export default function Dashboard() {
           </thead>
           <tbody>
             {guests.map((g, i) => (
-              <tr key={i} className="border-t text-sm bg-white hover:bg-gray-100">
+              <tr key={i} className="border-2 text-sm bg-white hover:bg-gray-100">
                 <td className="px-4 py-2">{g.sno}</td>
                 <td className="px-4 py-2">{g.arrivalDate}</td>
                 <td className="px-4 py-2">{g.arrivalTime}</td>
