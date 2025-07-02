@@ -2,6 +2,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// ✅ Move Input outside the component to avoid redefinition on re-renders
+const Input = ({ name, type = 'text', form, setForm, required = false }) => (
+  <input
+    type={type}
+    name={name}
+    required={required}
+    placeholder={name.replace(/([A-Z])/g, ' $1')}
+    className="w-full p-2 border rounded"
+    value={form[name]}
+    onChange={(e) => setForm((prev) => ({ ...prev, [name]: e.target.value }))}
+  />
+);
+
 export default function AddGuest() {
   const [form, setForm] = useState({
     sno: '',
@@ -42,8 +55,6 @@ export default function AddGuest() {
     Object.entries(form).forEach(([key, value]) => {
       data.append(key, value);
     });
-
-    // Send Aadhaar images
     aadharImages.forEach((file) => data.append('aadharImages', file));
 
     const token = localStorage.getItem('token');
@@ -62,17 +73,6 @@ export default function AddGuest() {
     }
   };
 
-  const Input = ({ name, type = 'text', ...rest }) => (
-    <input
-      type={type}
-      placeholder={name.replace(/([A-Z])/g, ' $1')}
-      className="w-full p-2 border rounded"
-      value={form[name]}
-      onChange={(e) => setForm({ ...form, [name]: e.target.value })}
-      {...rest}
-    />
-  );
-
   return (
     <div className="bg-[#FBE9D0] min-h-screen py-10 px-4 flex justify-center items-center">
       <form
@@ -82,38 +82,35 @@ export default function AddGuest() {
       >
         <h2 className="text-3xl font-bold mb-4 text-center text-[#244855]">Add Guest</h2>
 
-        {/* Basic Info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input name="sno" type="number" required />
-          <Input name="arrivalDate" type="date" required />
-          <Input name="arrivalTime" type="time" required />
-          <Input name="roomNumber" required />
-          <Input name="name" required />
-          <Input name="fatherName" />
-          <Input name="age" type="number" />
-          <Input name="accompanyingNames" />
-          <Input name="accompanyingRelations" />
-          <Input name="nationality" />
-          <Input name="purposeOfVisit" />
-          <Input name="occupation" />
-          <Input name="comingFrom" />
-          <Input name="goingTo" />
-          <Input name="fullAddress" />
-          <Input name="departureDate" type="date" />
-          <Input name="departureTime" type="time" />
-          <Input name="phone" />
-          <Input name="vehicleNumber" />
+          <Input name="sno" type="number" required form={form} setForm={setForm} />
+          <Input name="arrivalDate" type="date" required form={form} setForm={setForm} />
+          <Input name="arrivalTime" type="time" required form={form} setForm={setForm} />
+          <Input name="roomNumber" required form={form} setForm={setForm} />
+          <Input name="name" required form={form} setForm={setForm} />
+          <Input name="fatherName" form={form} setForm={setForm} />
+          <Input name="age" type="number" form={form} setForm={setForm} />
+          <Input name="accompanyingNames" form={form} setForm={setForm} />
+          <Input name="accompanyingRelations" form={form} setForm={setForm} />
+          <Input name="nationality" form={form} setForm={setForm} />
+          <Input name="purposeOfVisit" form={form} setForm={setForm} />
+          <Input name="occupation" form={form} setForm={setForm} />
+          <Input name="comingFrom" form={form} setForm={setForm} />
+          <Input name="goingTo" form={form} setForm={setForm} />
+          <Input name="fullAddress" form={form} setForm={setForm} />
+          <Input name="departureDate" type="date" form={form} setForm={setForm} />
+          <Input name="departureTime" type="time" form={form} setForm={setForm} />
+          <Input name="phone" form={form} setForm={setForm} />
+          <Input name="vehicleNumber" form={form} setForm={setForm} />
         </div>
 
-        {/* Number of persons */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Input name="male" type="number" />
-          <Input name="female" type="number" />
-          <Input name="boys" type="number" />
-          <Input name="girls" type="number" />
+          <Input name="male" type="number" form={form} setForm={setForm} />
+          <Input name="female" type="number" form={form} setForm={setForm} />
+          <Input name="boys" type="number" form={form} setForm={setForm} />
+          <Input name="girls" type="number" form={form} setForm={setForm} />
         </div>
 
-        {/* Aadhaar Upload */}
         <div>
           <label className="block font-bold mb-1">Upload Aadhaar Images:</label>
           <input
