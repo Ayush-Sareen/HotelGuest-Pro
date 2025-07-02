@@ -164,7 +164,7 @@ export default function Dashboard() {
                 <button
                   onClick={async () => {
                     const token = localStorage.getItem('token');
-                    await axios.delete(`https://hotelguest-pro-5agn.onrender.com/api/guests/${g._id}`, {
+                    confirm("Are you sure you want to delete this guest?") && await axios.delete(`https://hotelguest-pro-5agn.onrender.com/api/guests/${g._id}`, {
                       headers: { Authorization: `Bearer ${token}` },
                     });
                     fetchGuests();
