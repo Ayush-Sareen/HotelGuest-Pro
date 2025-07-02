@@ -198,39 +198,39 @@ export default function Dashboard() {
 
       {/* Guest Table */}
       <div className="overflow-x-auto">
-        <table className="table-auto w-full border border-gray-400">
+        <table className="table-auto w-full border border-black border-collapse">
           <thead className="bg-[#244855] text-white">
             <tr>
-              {tableHeaders.map(h => <th key={h} className="px-4 py-2 whitespace-nowrap text-sm md:text-base">{h}</th>)}
+              {tableHeaders.map(h => <th key={h} className="border border-black px-4 py-2 whitespace-nowrap text-sm md:text-base">{h}</th>)}
             </tr>
           </thead>
           <tbody>
             {guests.map((g, i) => (
               <tr key={i} className="border-2 text-sm bg-white hover:bg-gray-100">
-                <td className="px-4 py-2">{g.sno}</td>
-                <td className="px-4 py-2">{g.arrivalDate}</td>
-                <td className="px-4 py-2">{g.arrivalTime}</td>
-                <td className="px-4 py-2">{g.roomNumber}</td>
-                <td className="px-4 py-2">{g.name}</td>
-                <td className="px-4 py-2">{g.fatherName}</td>
-                <td className="px-4 py-2">{g.age}</td>
-                <td className="px-4 py-2">{g.accompanyingNames}</td>
-                <td className="px-4 py-2">{g.accompanyingRelations}</td>
-                <td className="px-4 py-2">{g.nationality}</td>
-                <td className="px-4 py-2">{g.purposeOfVisit}</td>
-                <td className="px-4 py-2">{g.occupation}</td>
-                <td className="px-4 py-2">{g.comingFrom}</td>
-                <td className="px-4 py-2">{g.goingTo}</td>
-                <td className="px-4 py-2">{g.fullAddress}</td>
-                <td className="px-4 py-2">{g.departureDate}</td>
-                <td className="px-4 py-2">{g.departureTime}</td>
-                <td className="px-4 py-2">{g.phone}</td>
-                <td className="px-4 py-2">{g.vehicleNumber}</td>
-                <td className="px-4 py-2">{g.numberOfPersons?.male}</td>
-                <td className="px-4 py-2">{g.numberOfPersons?.female}</td>
-                <td className="px-4 py-2">{g.numberOfPersons?.boys}</td>
-                <td className="px-4 py-2">{g.numberOfPersons?.girls}</td>
-                <td className="px-4 py-2">
+                <td className="border border-black px-4 py-2">{g.sno}</td>
+                <td className="border border-black px-4 py-2">{g.arrivalDate}</td>
+                <td className="border border-black px-4 py-2">{g.arrivalTime}</td>
+                <td className="border border-black px-4 py-2">{g.roomNumber}</td>
+                <td className="border border-black px-4 py-2">{g.name}</td>
+                <td className="border border-black px-4 py-2">{g.fatherName}</td>
+                <td className="border border-black px-4 py-2">{g.age}</td>
+                <td className="border border-black px-4 py-2">{g.accompanyingNames}</td>
+                <td className="border border-black px-4 py-2">{g.accompanyingRelations}</td>
+                <td className="border border-black px-4 py-2">{g.nationality}</td>
+                <td className="border border-black px-4 py-2">{g.purposeOfVisit}</td>
+                <td className="border border-black px-4 py-2">{g.occupation}</td>
+                <td className="border border-black px-4 py-2">{g.comingFrom}</td>
+                <td className="border border-black px-4 py-2">{g.goingTo}</td>
+                <td className="border border-black px-4 py-2">{g.fullAddress}</td>
+                <td className="border border-black px-4 py-2">{g.departureDate}</td>
+                <td className="border border-black px-4 py-2">{g.departureTime}</td>
+                <td className="border border-black px-4 py-2">{g.phone}</td>
+                <td className="border border-black px-4 py-2">{g.vehicleNumber}</td>
+                <td className="border border-black px-4 py-2">{g.numberOfPersons?.male}</td>
+                <td className="border border-black px-4 py-2">{g.numberOfPersons?.female}</td>
+                <td className="border border-black px-4 py-2">{g.numberOfPersons?.boys}</td>
+                <td className="border border-black px-4 py-2">{g.numberOfPersons?.girls}</td>
+                <td className="border border-black px-4 py-2">
                   {g.aadharImages?.map((url, idx) => (
                     <a key={idx} href={url} target="_blank" rel="noreferrer" className="text-blue-600 underline block">
                       Aadhaar {idx + 1}
