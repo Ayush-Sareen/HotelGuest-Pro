@@ -48,6 +48,14 @@
 | DELETE | `/api/guests/:id`             | Delete guest               |
 | GET    | `/api/excel/download-excel`   | Download Excel with images |
 
+
+
+## 📺 Demo Video
+
+[![Watch on YouTube](https://img.youtube.com/vi/acLHT6jByVE/0.jpg)](https://www.youtube.com/watch?v=acLHT6jByVE)
+
+> Click the thumbnail above or [watch the full demo here](https://www.youtube.com/watch?v=acLHT6jByVE)
+
 ---
 
 ## 🧑‍💻 Author
