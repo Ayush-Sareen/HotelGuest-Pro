@@ -2,22 +2,24 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-// ✅ Move Input outside the component to avoid redefinition on re-renders
-const Input = ({ name, type = 'text', form, setForm, required = false }) => (
-  <input
-    type={type}
-    name={name}
-    required={required}
-    placeholder={name.replace(/([A-Z])/g, ' $1')}
-    className="w-full p-2 border rounded"
-    value={form[name]}
-    onChange={(e) => setForm((prev) => ({ ...prev, [name]: e.target.value }))}
-  />
+// ✅ Reusable labeled input component
+const LabeledInput = ({ label, name, type = 'text', form, setForm, required = false }) => (
+  <div>
+    <label className="block font-semibold text-[#244855] mb-1">{label}</label>
+    <input
+      type={type}
+      name={name}
+      required={required}
+      placeholder={label}
+      className="w-full p-2 border rounded"
+      value={form[name]}
+      onChange={(e) => setForm((prev) => ({ ...prev, [name]: e.target.value }))}
+    />
+  </div>
 );
 
 export default function AddGuest() {
   const [form, setForm] = useState({
-    sno: '',
     arrivalDate: '',
     arrivalTime: '',
     roomNumber: '',
@@ -73,7 +75,7 @@ export default function AddGuest() {
     }
   };
 
-return (
+  return (
     <div className="bg-[#FBE9D0] min-h-screen py-10 px-4 flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
