@@ -82,6 +82,7 @@ export default function Dashboard() {
 
     for (const [i, g] of guests.entries()) {
       worksheet.addRow({
+        sno: i + 1, // ✅ auto-generated serial number
         ...g,
         male: g.numberOfPersons?.male,
         female: g.numberOfPersons?.female,
@@ -138,106 +139,130 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-cover bg-center px-4 py-2 md:px-8" style={{ backgroundImage: "url('/back.jpg')" }}>
-      <div className="flex flex-col md:flex-row justify-between items-center gap-2 mb-4 bg-slate-900 p-4 rounded-xl">
-        <h1 className="text-2xl md:text-3xl font-bold text-white text-center md:text-left">
+    <div className="w-full min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/back.jpg')" }}>
+      <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4 rounded-xl">
+        <h1 className="text-3xl font-bold text-white">
           Guest Records <span className="text-[#FF5C00]">{hotelName && `of ${hotelName}`}</span>
         </h1>
         <div className="flex flex-wrap justify-center gap-2">
-          <button onClick={() => navigate("/add")} className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
-            <span className="text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+          <button onClick={() => navigate("/add")} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
+            <span className=" text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
               Add Guest
             </span>
           </button>
-          <button onClick={exportToExcel} className="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
-            <span className="text-lg relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent">
+          <button onClick={exportToExcel} className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
+            <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent text-lg">
               Export to Excel
             </span>
           </button>
-          <button type="button" onClick={handleLogout} className="text-red-700 hover:text-white border text-lg border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-            LogOut
-          </button>
+          <button type="button" onClick={handleLogout} className="text-red-700 hover:text-white border text-lg border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">LogOut</button>
         </div>
-      </div>
+      </nav>
 
-      {/* Filters */}
-      <div className="bg-[#874f41] text-white p-4 rounded-lg mb-4 shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Filters</h2>
-        <div className="grid md:grid-cols-4 gap-4">
-          <input type="text" placeholder="Filter by name" className="p-2 rounded text-black" value={filters.name} onChange={e => setFilters({ ...filters, name: e.target.value })} />
-          <input type="date" className="p-2 rounded text-black" value={filters.date} onChange={e => setFilters({ ...filters, date: e.target.value })} />
-          <input type="month" className="p-2 rounded text-black" value={filters.month} onChange={e => setFilters({ ...filters, month: e.target.value })} />
-          <button onClick={fetchGuests} className="bg-[#244855] px-4 py-2 rounded font-bold">Apply</button>
+      {/* Filter Section */}
+      <div className="bg-[#874f41] text-white p-6 rounded-lg mb-4 mx-2 sm:mx-4 md:mx-8">
+        <h2 className="text-2xl font-semibold mb-4">Filter Guest Records</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div>
+            <label className="block mb-1 text-sm font-medium">Guest Name</label>
+            <input
+              type="text"
+              placeholder="e.g., John"
+              className="p-2 w-full rounded-4xl text-black border-2"
+              value={filters.name}
+              onChange={e => setFilters({ ...filters, name: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-sm font-medium">Arrival Date</label>
+            <input
+              type="date"
+              className="p-2 w-full rounded-4xl text-black border-2"
+              value={filters.date}
+              onChange={e => setFilters({ ...filters, date: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="block mb-1 text-sm font-medium">Arrival Month</label>
+            <input
+              type="month"
+              className="p-2 w-full text-black border-2 rounded-4xl"
+              value={filters.month}
+              onChange={e => setFilters({ ...filters, month: e.target.value })}
+            />
+          </div>
         </div>
+        <button
+          onClick={fetchGuests}
+          className="mt-6 bg-[#244855] hover:bg-[#1a343e] px-6 py-2 text-white font-bold text-base rounded transition"
+        >
+          Apply Filters
+        </button>
       </div>
 
       {/* Edit Form */}
       {editData && (
-        <form onSubmit={handleUpdate} className="bg-white p-4 rounded-lg mb-4 shadow-md">
-          <h2 className="text-xl font-semibold mb-4">Edit Guest</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {Object.keys(editData).map(key => (
-              typeof editData[key] === 'string' && (
-                <input
-                  key={key}
-                  className="block p-2 border border-gray-300 rounded"
-                  type="text"
-                  placeholder={key}
-                  value={editData[key] || ''}
-                  onChange={e => setEditData({ ...editData, [key]: e.target.value })}
-                />
-              )
-            ))}
-          </div>
-          <div className="mt-4">
-            <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
-            <button type="button" onClick={() => setEditData(null)} className="ml-2 px-4 py-2 border rounded">Cancel</button>
-          </div>
+        <form onSubmit={handleUpdate} className="bg-white p-4 rounded-lg mb-4 shadow mx-2 sm:mx-4 md:mx-8">
+          <h2 className="text-xl font-bold mb-2">Edit Guest</h2>
+          {Object.keys(editData).map(key => (
+            typeof editData[key] === 'string' && (
+              <input
+                key={key}
+                className="block mb-2 p-2 border w-full"
+                type="text"
+                placeholder={key}
+                value={editData[key] || ''}
+                onChange={e => setEditData({ ...editData, [key]: e.target.value })}
+              />
+            )
+          ))}
+          <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
+          <button type="button" onClick={() => setEditData(null)} className="ml-2 px-4 py-2 border rounded">Cancel</button>
         </form>
       )}
 
       {/* Guest Table */}
-      <div className="overflow-x-auto">
-        <table className="table-auto w-full border border-black border-collapse">
-          <thead className="bg-[#244855] text-white">
+      <div className="overflow-x-auto mx-2 sm:mx-4 md:mx-8 mb-8">
+        <table className="table-auto w-full border border-gray-400 border-collapse">
+          <thead className="bg-[#244855] text-white text-sm">
             <tr>
-              {tableHeaders.map(h => <th key={h} className="border border-black px-4 py-2 whitespace-nowrap text-sm md:text-base">{h}</th>)}
+              {tableHeaders.map(h => <th key={h} className="px-4 py-2 whitespace-nowrap border border-gray-400">{h}</th>)}
             </tr>
           </thead>
           <tbody>
             {guests.map((g, i) => (
-              <tr key={i} className="border-2 text-sm bg-white hover:bg-gray-100">
-                <td className="border border-black px-4 py-2">{g.sno}</td>
-                <td className="border border-black px-4 py-2">{g.arrivalDate}</td>
-                <td className="border border-black px-4 py-2">{g.arrivalTime}</td>
-                <td className="border border-black px-4 py-2">{g.roomNumber}</td>
-                <td className="border border-black px-4 py-2">{g.name}</td>
-                <td className="border border-black px-4 py-2">{g.fatherName}</td>
-                <td className="border border-black px-4 py-2">{g.age}</td>
-                <td className="border border-black px-4 py-2">{g.accompanyingNames}</td>
-                <td className="border border-black px-4 py-2">{g.accompanyingRelations}</td>
-                <td className="border border-black px-4 py-2">{g.nationality}</td>
-                <td className="border border-black px-4 py-2">{g.purposeOfVisit}</td>
-                <td className="border border-black px-4 py-2">{g.occupation}</td>
-                <td className="border border-black px-4 py-2">{g.comingFrom}</td>
-                <td className="border border-black px-4 py-2">{g.goingTo}</td>
-                <td className="border border-black px-4 py-2">{g.fullAddress}</td>
-                <td className="border border-black px-4 py-2">{g.departureDate}</td>
-                <td className="border border-black px-4 py-2">{g.departureTime}</td>
-                <td className="border border-black px-4 py-2">{g.phone}</td>
-                <td className="border border-black px-4 py-2">{g.vehicleNumber}</td>
-                <td className="border border-black px-4 py-2">{g.numberOfPersons?.male}</td>
-                <td className="border border-black px-4 py-2">{g.numberOfPersons?.female}</td>
-                <td className="border border-black px-4 py-2">{g.numberOfPersons?.boys}</td>
-                <td className="border border-black px-4 py-2">{g.numberOfPersons?.girls}</td>
-                <td className="border border-black px-4 py-2">
+              <tr key={i} className="border-t text-sm bg-white bg-opacity-90">
+                <td className="px-4 py-2 border border-gray-400">{i + 1}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.arrivalDate}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.arrivalTime}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.roomNumber}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.name}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.fatherName}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.age}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.accompanyingNames}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.accompanyingRelations}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.nationality}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.purposeOfVisit}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.occupation}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.comingFrom}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.goingTo}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.fullAddress}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.departureDate}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.departureTime}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.phone}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.vehicleNumber}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.numberOfPersons?.male}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.numberOfPersons?.female}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.numberOfPersons?.boys}</td>
+                <td className="px-4 py-2 border border-gray-400">{g.numberOfPersons?.girls}</td>
+                <td className="px-4 py-2 border border-gray-400">
                   {g.aadharImages?.map((url, idx) => (
                     <a key={idx} href={url} target="_blank" rel="noreferrer" className="text-blue-600 underline block">
                       Aadhaar {idx + 1}
                     </a>
                   ))}
                 </td>
-                <td className="px-4 py-2">
+                <td className="px-4 py-2 whitespace-nowrap">
                   <button onClick={() => setEditData(g)} className="text-yellow-600 hover:underline mr-2">Edit</button>
                   <button
                     onClick={async () => {

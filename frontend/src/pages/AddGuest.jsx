@@ -73,7 +73,7 @@ export default function AddGuest() {
     }
   };
 
-  return (
+return (
     <div className="bg-[#FBE9D0] min-h-screen py-10 px-4 flex justify-center items-center">
       <form
         onSubmit={handleSubmit}
@@ -83,36 +83,35 @@ export default function AddGuest() {
         <h2 className="text-3xl font-bold mb-4 text-center text-[#244855]">Add Guest</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input name="sno" type="number" required form={form} setForm={setForm} />
-          <Input name="arrivalDate" type="date" required form={form} setForm={setForm} />
-          <Input name="arrivalTime" type="time" required form={form} setForm={setForm} />
-          <Input name="roomNumber" required form={form} setForm={setForm} />
-          <Input name="name" required form={form} setForm={setForm} />
-          <Input name="fatherName" form={form} setForm={setForm} />
-          <Input name="age" type="number" form={form} setForm={setForm} />
-          <Input name="accompanyingNames" form={form} setForm={setForm} />
-          <Input name="accompanyingRelations" form={form} setForm={setForm} />
-          <Input name="nationality" form={form} setForm={setForm} />
-          <Input name="purposeOfVisit" form={form} setForm={setForm} />
-          <Input name="occupation" form={form} setForm={setForm} />
-          <Input name="comingFrom" form={form} setForm={setForm} />
-          <Input name="goingTo" form={form} setForm={setForm} />
-          <Input name="fullAddress" form={form} setForm={setForm} />
-          <Input name="departureDate" type="date" form={form} setForm={setForm} />
-          <Input name="departureTime" type="time" form={form} setForm={setForm} />
-          <Input name="phone" form={form} setForm={setForm} />
-          <Input name="vehicleNumber" form={form} setForm={setForm} />
+          <LabeledInput label="Arrival Date" name="arrivalDate" type="date" required form={form} setForm={setForm} />
+          <LabeledInput label="Arrival Time" name="arrivalTime" type="time" required form={form} setForm={setForm} />
+          <LabeledInput label="Room Number" name="roomNumber" required form={form} setForm={setForm} />
+          <LabeledInput label="Guest Name" name="name" required form={form} setForm={setForm} />
+          <LabeledInput label="Father's Name" name="fatherName" form={form} setForm={setForm} />
+          <LabeledInput label="Age" name="age" type="number" form={form} setForm={setForm} />
+          <LabeledInput label="Accompanying Names" name="accompanyingNames" form={form} setForm={setForm} />
+          <LabeledInput label="Accompanying Relations" name="accompanyingRelations" form={form} setForm={setForm} />
+          <LabeledInput label="Nationality" name="nationality" form={form} setForm={setForm} />
+          <LabeledInput label="Purpose of Visit" name="purposeOfVisit" form={form} setForm={setForm} />
+          <LabeledInput label="Occupation" name="occupation" form={form} setForm={setForm} />
+          <LabeledInput label="Coming From" name="comingFrom" form={form} setForm={setForm} />
+          <LabeledInput label="Going To" name="goingTo" form={form} setForm={setForm} />
+          <LabeledInput label="Full Address" name="fullAddress" form={form} setForm={setForm} />
+          <LabeledInput label="Departure Date" name="departureDate" type="date" form={form} setForm={setForm} />
+          <LabeledInput label="Departure Time" name="departureTime" type="time" form={form} setForm={setForm} />
+          <LabeledInput label="Phone Number" name="phone" form={form} setForm={setForm} />
+          <LabeledInput label="Vehicle Number" name="vehicleNumber" form={form} setForm={setForm} />
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Input name="male" type="number" form={form} setForm={setForm} />
-          <Input name="female" type="number" form={form} setForm={setForm} />
-          <Input name="boys" type="number" form={form} setForm={setForm} />
-          <Input name="girls" type="number" form={form} setForm={setForm} />
+          <LabeledInput label="Male" name="male" type="number" form={form} setForm={setForm} />
+          <LabeledInput label="Female" name="female" type="number" form={form} setForm={setForm} />
+          <LabeledInput label="Boys" name="boys" type="number" form={form} setForm={setForm} />
+          <LabeledInput label="Girls" name="girls" type="number" form={form} setForm={setForm} />
         </div>
 
         <div>
-          <label className="block font-bold mb-1">Upload Aadhaar Images:</label>
+          <label className="block font-bold mb-1 text-[#244855]">Upload Aadhaar Images:</label>
           <input
             type="file"
             accept="image/*"
