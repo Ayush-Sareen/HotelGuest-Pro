@@ -139,8 +139,11 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="w-full min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/back.jpg')" }}>
-      <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4 rounded-xl">
+    <div
+      className="w-full min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
+      style={{ backgroundImage: "url('/back.jpg')" }}
+    >
+      <nav className="flex justify-between items-center mb-4 bg-slate-900 p-4">
         <h1 className="text-3xl font-bold text-white">
           Guest Records <span className="text-[#FF5C00]">{hotelName && `of ${hotelName}`}</span>
         </h1>
@@ -223,7 +226,7 @@ export default function Dashboard() {
 
       {/* Guest Table */}
       <div className="overflow-x-auto mx-2 sm:mx-4 md:mx-8 mb-8">
-        <table className="table-auto w-full border border-gray-400 border-collapse">
+        <table className="table-auto w-full border-2 border-collapse">
           <thead className="bg-[#244855] text-white text-sm">
             <tr>
               {tableHeaders.map(h => <th key={h} className="px-4 py-2 whitespace-nowrap border border-gray-400">{h}</th>)}
